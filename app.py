@@ -72,14 +72,14 @@ Real-Time Threat Intelligence System
 <hr style='border:1px solid #00FFAA'>
 """, unsafe_allow_html=True)
 
-class AudioProcessor(AudioProcessorBase):
-    def __init__(self):
-        self.audio_data = []
+#class AudioProcessor(AudioProcessorBase):
+#    def __init__(self):
+#        self.audio_data = []
 
-    def recv(self, frame: av.AudioFrame):
-        self.audio_data.append(frame.to_ndarray())
-        print("Receiving audio frame")
-        return frame
+ #   def recv(self, frame: av.AudioFrame):
+#        self.audio_data.append(frame.to_ndarray())
+ #       print("Receiving audio frame")
+#        return frame
 
 # ---------------- FUNCTIONS ----------------
 def show_metric(title, value, icon_name ,color):
@@ -131,17 +131,17 @@ def calculate_threat(keyword_score, emotion_score, prediction):
     else:
         return score, "LOW"
 
-def record_audio(filename="recorded.wav", duration=5):
+#def record_audio(filename="recorded.wav", duration=5):
 
-    webrtc_ctx = webrtc_streamer(
-       key="record",
-       audio_processor_factory=AudioProcessor,
-       rtc_configuration=RTC_CONFIGURATION,
-       media_stream_constraints={"audio": True, "video": False},
-    )
+  #  webrtc_ctx = webrtc_streamer(
+ #      key="record",
+ #      audio_processor_factory=AudioProcessor,
+ #      rtc_configuration=RTC_CONFIGURATION,
+ #      media_stream_constraints={"audio": True, "video": False},
+ #   )
 
-    if st.button("Stop Recording"):
-        if webrtc_ctx.audio_processor:
+ #   if st.button("Stop Recording"):
+       ### if webrtc_ctx.audio_processor:
             audio_chunks = webrtc_ctx.audio_processor.audio_data
 
             if len(audio_chunks) > 0:
@@ -154,20 +154,20 @@ def record_audio(filename="recorded.wav", duration=5):
 
                 return filename
 
-    return None
+  #  return None
 
-def record_chunk(filename="temp.wav", duration=2):
-    webrtc_ctx = webrtc_streamer(
-       key="live",
-       audio_processor_factory=AudioProcessor,
-       rtc_configuration=RTC_CONFIGURATION,
-       media_stream_constraints={"audio": True, "video": False},
-    )
+##def record_chunk(filename="temp.wav", duration=2):
+   ## webrtc_ctx = webrtc_streamer(
+    #   key="live",
+     #  audio_processor_factory=AudioProcessor,
+    #   rtc_configuration=RTC_CONFIGURATION,
+    #   media_stream_constraints={"audio": True, "video": False},
+   # )
 
-    if webrtc_ctx.audio_processor:
-        audio_chunks = webrtc_ctx.audio_processor.audio_data
+  ##  if webrtc_ctx.audio_processor:
+       # audio_chunks = webrtc_ctx.audio_processor.audio_data
 
-        if len(audio_chunks) > 5:
+       # if len(audio_chunks) > 5:
             audio_np = np.concatenate(audio_chunks, axis=0)
             audio_np = audio_np.flatten()
             audio_np = (audio_np * 32767).astype(np.int16)
@@ -180,6 +180,13 @@ def record_chunk(filename="temp.wav", duration=2):
             return filename
     
 
+   ## return None
+
+def record_audio(filename="recorded.wav", duration=5):
+    st.warning("🎤 Recording not supported in deployed app. Please upload audio.")
+    return None
+
+def record_chunk(filename="temp.wav", duration=2):
     return None
 
 # ---------------- LOAD MODEL ----------------
