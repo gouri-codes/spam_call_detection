@@ -15,7 +15,6 @@ from feature_extraction import extract_features
 import textblob
 
 import os
-
 IS_CLOUD = os.environ.get("STREAMLIT_SERVER_PORT") is not None
 
 RTC_CONFIGURATION = {
@@ -223,11 +222,11 @@ elif mode == "Record Audio":
         4. Then click **STOP** in the mic box  
         """) 
     if IS_CLOUD:
-        st.warning("⚠️ Microphone not supported on deployed app. Please upload audio.")
+        st.warning("⚠️ Recording disabled on deployed app. Use Upload Audio.")
     else:
         if st.button("Record Audio"):
             audio_path = record_audio()
-            st.audio(audio_path)    
+            st.audio(audio_path)   
 
 elif mode == "Live Detection":
     with st.expander("ℹ️ Instructions"):    
@@ -240,7 +239,7 @@ elif mode == "Live Detection":
         5. Click **Stop Live** when done  
         """)   
     if IS_CLOUD:
-        st.warning("⚠️ Live detection not supported on deployed app. Please upload audio.")
+        st.warning("⚠️ Live detection disabled on deployed app.")
     else:
         col1, col2 = st.columns(2)
         if col1.button("Start Live"):
@@ -285,7 +284,7 @@ if st.session_state.audio_path is not None:
         plot_waveform(audio_path)
     with col2:
         st.markdown("### Spectrogram Analysis")
-        plot_spectrogram(audio_path)
+        #plot_spectrogram(audio_path)
 
     st.markdown("### <i data-feather='cpu'></i> AI Processing", unsafe_allow_html=True)
     st.markdown("<script>feather.replace()</script>", unsafe_allow_html=True)
