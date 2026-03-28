@@ -71,7 +71,7 @@ Real-Time Threat Intelligence System
 </p>
 <hr style='border:1px solid #00FFAA'>
 """, unsafe_allow_html=True)
-
+st.success("✅ System Ready | Upload audio to detect scam calls")
 #class AudioProcessor(AudioProcessorBase):
 #    def __init__(self):
 #        self.audio_data = []
@@ -106,14 +106,21 @@ def plot_waveform(audio_path):
     ax.plot(y)
     st.pyplot(fig)
 
-#def plot_spectrogram(audio_path):
- #   y, sr = librosa.load(audio_path)
- #   S = librosa.stft(y)
- #   S_db = librosa.amplitude_to_db(abs(S))
- #   fig, ax = plt.subplots()
- #   img = librosa.display.specshow(S_db, sr=sr, x_axis='time', y_axis='hz', ax=ax)
- #   fig.colorbar(img, ax=ax)
- #   st.pyplot(fig)
+def plot_spectrogram(audio_path):
+    from scipy.io import wavfile
+    from scipy import signal
+
+    sr, y = wavfile.read(audio_path)
+
+    fig, ax = plt.subplots()
+    frequencies, times, Sxx = signal.spectrogram(y, sr)
+
+    ax.pcolormesh(times, frequencies, Sxx)
+    ax.set_ylabel('Frequency [Hz]')
+    ax.set_xlabel('Time [sec]')
+    ax.set_title("Spectrogram")
+
+    st.pyplot(fig)
 
 def calculate_threat(keyword_score, emotion_score, prediction):
     score = keyword_score + emotion_score
@@ -207,6 +214,10 @@ mode = st.sidebar.radio(
     ["Upload Audio", "Record Audio", "Live Detection"]
 )
 
+# 🎯 Demo Button (works in all modes)
+if st.sidebar.button("Run Demo"):
+    st.session_state.audio_path = "demo.wav"
+
 if "running" not in st.session_state:
     st.session_state.running = False
 
@@ -229,7 +240,13 @@ elif mode == "Record Audio":
         4. Then click **STOP** in the mic box  
         """) 
     if IS_CLOUD:
-        st.warning("⚠️ Recording disabled on deployed app. Use Upload Audio.")
+        st.info("""
+        🎤 **Live Recording Disabled (Cloud Limitation)**
+
+        This feature works in local environment only due to browser security and WebRTC restrictions.
+
+        👉 Please use **Upload Audio** to test full functionality.
+        """)
     else:
         if st.button("Record Audio"):
             audio_path = record_audio()
@@ -246,7 +263,13 @@ elif mode == "Live Detection":
         5. Click **Stop Live** when done  
         """)   
     if IS_CLOUD:
-        st.warning("⚠️ Live detection disabled on deployed app.")
+       st.info("""
+    🎤 **Live Recording Disabled (Cloud Limitation)**
+
+    This feature works in local environment only due to browser security and WebRTC restrictions.
+
+    👉 Please use **Upload Audio** to test full functionality.
+    """)
     else:
         col1, col2 = st.columns(2)
         if col1.button("Start Live"):
@@ -291,7 +314,7 @@ if st.session_state.audio_path is not None:
         plot_waveform(audio_path)
     with col2:
         st.markdown("### Spectrogram Analysis")
-        #plot_spectrogram(audio_path)
+        plot_spectrogram(audio_path)
 
     st.markdown("### <i data-feather='cpu'></i> AI Processing", unsafe_allow_html=True)
     st.markdown("<script>feather.replace()</script>", unsafe_allow_html=True)
@@ -395,7 +418,7 @@ st.dataframe(df.tail(10), width="stretch")
 # -------- THREAT GRAPH --------
 st.markdown("##  Threat Trend")
 
-st.line_chart(df["Score"])
+st.line_chart(df.set_index("Time")["Score"])
 
 st.download_button(
     "⬇️ Download Full Report",
