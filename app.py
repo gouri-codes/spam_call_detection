@@ -16,6 +16,10 @@ import textblob
 from streamlit_webrtc import webrtc_streamer, AudioProcessorBase
 import av
 
+import os
+
+IS_CLOUD = os.environ.get("STREAMLIT_SERVER_PORT") is not None
+
 RTC_CONFIGURATION = {
     "iceServers": [
         {"urls": ["stun:stun.l.google.com:19302"]}
@@ -217,13 +221,13 @@ elif mode == "Record Audio":
         2. Speak clearly for a few seconds  
         3. Click **Stop Recording**  
         4. Then click **STOP** in the mic box  
-        """)     
-
-    audio_file = record_audio()
-    
-    if audio_file:
-        st.session_state.audio_path = audio_file
-        st.audio(audio_file)    
+        """) 
+    if IS_CLOUD:
+        st.warning("⚠️ Microphone not supported on deployed app. Please upload audio.")
+    else:
+        if st.button("Record Audio"):
+            audio_path = record_audio()
+            st.audio(audio_path)    
 
 elif mode == "Live Detection":
     with st.expander("ℹ️ Instructions"):    
@@ -234,14 +238,15 @@ elif mode == "Live Detection":
         3. Speak continuously  
         4. System will auto-analyze every few seconds  
         5. Click **Stop Live** when done  
-        """)    
-
-    col1, col2 = st.columns(2)
-    if col1.button("Start Live"):
-        st.session_state.running = True
-    if col2.button("Stop Live"):
-        st.session_state.running = False
-
+        """)   
+    if IS_CLOUD:
+        st.warning("⚠️ Live detection not supported on deployed app. Please upload audio.")
+    else:
+        col1, col2 = st.columns(2)
+        if col1.button("Start Live"):
+            st.session_state.running = True
+        if col2.button("Stop"):
+            st.session_state.running = False
 # ---------------- LIVE ----------------
 if st.session_state.running:
     st.warning("LIVE DETECTION ACTIVE")
