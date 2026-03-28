@@ -115,16 +115,23 @@ def plot_waveform(audio_path):
 def plot_spectrogram(audio_path):
     from scipy.io import wavfile
     from scipy import signal
+    import numpy as np
 
     sr, y = wavfile.read(audio_path)
 
-    fig, ax = plt.subplots()
     frequencies, times, Sxx = signal.spectrogram(y, sr)
 
-    ax.pcolormesh(times, frequencies, Sxx)
+    # 🔥 convert to log scale
+    Sxx_log = 10 * np.log10(Sxx + 1e-10)
+
+    fig, ax = plt.subplots()
+    img = ax.pcolormesh(times, frequencies, Sxx_log)
+
     ax.set_ylabel('Frequency [Hz]')
     ax.set_xlabel('Time [sec]')
     ax.set_title("Spectrogram")
+
+    fig.colorbar(img, ax=ax)
 
     st.pyplot(fig)
 
