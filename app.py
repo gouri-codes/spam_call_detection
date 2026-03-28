@@ -63,14 +63,20 @@ h1, h2, h3 {
 # ---------------- TITLE ----------------
 
 st.markdown("""
-<h1 class="glow" style='text-align:center; font-size:70px;'>
+<h1 class="glow" style='
+text-align:center;
+font-size:clamp(28px, 6vw, 70px);
+line-height:1.2;
+word-break:break-word;
+'>
 AI CYBERSECURITY SOC
 </h1>
-<p style='text-align:center; color:#888; font-size:18px;'>
+<p style='text-align:center; color:#888; font-size:clamp(12px, 2.5vw, 18px);'>
 Real-Time Threat Intelligence System
 </p>
 <hr style='border:1px solid #00FFAA'>
 """, unsafe_allow_html=True)
+
 st.success("✅ System Ready | Upload audio to detect scam calls")
 #class AudioProcessor(AudioProcessorBase):
 #    def __init__(self):
