@@ -144,15 +144,15 @@ def calculate_threat(keyword_score, emotion_score, prediction):
        ### if webrtc_ctx.audio_processor:
          #   audio_chunks = webrtc_ctx.audio_processor.audio_data
 
-            if len(audio_chunks) > 0:
-                audio_np = np.concatenate(audio_chunks, axis=0)
-                audio_np = audio_np.flatten()
-                audio_np = (audio_np * 32767).astype(np.int16)
+           # if len(audio_chunks) > 0:
+              #  audio_np = np.concatenate(audio_chunks, axis=0)
+              #  audio_np = audio_np.flatten()
+              #  audio_np = (audio_np * 32767).astype(np.int16)
 
-                from scipy.io.wavfile import write
-                write(filename, 16000, audio_np)
+               # from scipy.io.wavfile import write
+               # write(filename, 16000, audio_np)
 
-                return filename
+              #  return filename
 
   #  return None
 
@@ -168,16 +168,16 @@ def calculate_threat(keyword_score, emotion_score, prediction):
        # audio_chunks = webrtc_ctx.audio_processor.audio_data
 
        # if len(audio_chunks) > 5:
-            audio_np = np.concatenate(audio_chunks, axis=0)
-            audio_np = audio_np.flatten()
-            audio_np = (audio_np * 32767).astype(np.int16)
+        #    audio_np = np.concatenate(audio_chunks, axis=0)
+        #    audio_np = audio_np.flatten()
+        #    audio_np = (audio_np * 32767).astype(np.int16)
 
-            from scipy.io.wavfile import write
-            write(filename, 16000, audio_np)
+        #    from scipy.io.wavfile import write
+        #    write(filename, 16000, audio_np)
             
-            webrtc_ctx.audio_processor.audio_data = []
+        #    webrtc_ctx.audio_processor.audio_data = []
 
-            return filename
+        #    return filename
     
 
    ## return None
