@@ -13,8 +13,6 @@ from keywords import detect_keywords
 from emotion import detect_emotion
 from feature_extraction import extract_features
 import textblob
-from streamlit_webrtc import webrtc_streamer, AudioProcessorBase
-import av
 
 import os
 
@@ -100,6 +98,8 @@ def show_metric(title, value, icon_name ,color):
         <h1 style="color:{color};">{value}</h1>
     </div>
     """, unsafe_allow_html=True)
+
+from scipy.io import wavfile
 
 def plot_waveform(audio_path):
     sr, y = wavfile.read(audio_path)
