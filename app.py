@@ -142,7 +142,7 @@ def calculate_threat(keyword_score, emotion_score, prediction):
 
  #   if st.button("Stop Recording"):
        ### if webrtc_ctx.audio_processor:
-            audio_chunks = webrtc_ctx.audio_processor.audio_data
+         #   audio_chunks = webrtc_ctx.audio_processor.audio_data
 
             if len(audio_chunks) > 0:
                 audio_np = np.concatenate(audio_chunks, axis=0)
